@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>自动化WEB</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>自动化WEB</h1>
+      <span class="subtitle">自动录制和回放</span>
+    </header>
+
+    <div class="status-bar" id="statusBar">
+      <span class="status-dot" id="statusDot"></span>
+      <span id="statusText">就绪</span>
+    </div>
+
+    <div class="actions">
+      <button id="btnCreate" class="btn btn-primary">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><circle cx="8" cy="8" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/><line x1="8" y1="4" x2="8" y2="12" stroke="currentColor" stroke-width="1.5"/><line x1="4" y1="8" x2="12" y2="8" stroke="currentColor" stroke-width="1.5"/></svg>
+        创建
+      </button>
+      <button id="btnStopRecord" class="btn btn-danger" style="display:none;">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><rect x="3" y="3" width="10" height="10" rx="1"/></svg>
+        结束录制
+      </button>
+    </div>
+
+    <div class="task-list-header">
+      <h2>任务列表</h2>
+      <span class="task-count" id="taskCount">0</span>
+    </div>
+
+    <div class="task-list" id="taskList">
+      <div class="empty-state" id="emptyState">
+        <p>暂无任务</p>
+        <p class="hint">点击「创建」开始录制操作</p>
+      </div>
+    </div>
+
+    <div class="playback-settings" id="playbackSettings">
+      <div class="setting-row">
+        <label>循环次数</label>
+        <input type="number" id="loopCount" min="1" value="1" />
+      </div>
+      <div class="setting-row">
+        <label>回放速度</label>
+        <select id="playbackSpeed">
+          <option value="0.5">0.5x</option>
+          <option value="1" selected>1x</option>
+          <option value="2">2x</option>
+          <option value="4">4x</option>
+        </select>
+      </div>
+    </div>
+
+    <footer>
+      <a href="#" id="btnOptions" class="link-btn">设置</a>
+    </footer>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

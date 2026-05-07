@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>自动化WEB - 设置</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #f5f5f5;
+      color: #1a1a1a;
+      padding: 40px;
+    }
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    h1 {
+      font-size: 24px;
+      margin-bottom: 24px;
+      color: #333;
+    }
+    .section {
+      background: white;
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 16px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    }
+    .section h2 {
+      font-size: 16px;
+      margin-bottom: 16px;
+      color: #4a90d9;
+    }
+    .setting-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    .setting-row:last-child {
+      border-bottom: none;
+    }
+    .setting-row label {
+      font-size: 14px;
+      color: #333;
+    }
+    .setting-row .desc {
+      font-size: 12px;
+      color: #999;
+      margin-top: 2px;
+    }
+    .shortcut-key {
+      background: #f5f5f5;
+      border: 1px solid #d9d9d9;
+      border-radius: 6px;
+      padding: 6px 12px;
+      font-size: 13px;
+      font-family: monospace;
+      min-width: 120px;
+      text-align: center;
+    }
+    .btn {
+      padding: 8px 20px;
+      border: none;
+      border-radius: 6px;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-primary {
+      background: #4a90d9;
+      color: white;
+    }
+    .btn-primary:hover {
+      background: #357abd;
+    }
+    .btn-danger {
+      background: #ff4d4f;
+      color: white;
+    }
+    .btn-danger:hover {
+      background: #d9363e;
+    }
+    .actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 16px;
+    }
+    .toast {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: #52c41a;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 14px;
+      display: none;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>自动化WEB - 设置</h1>
+
+    <div class="section">
+      <h2>快捷键</h2>
+      <div class="setting-row">
+        <div>
+          <label>开始/停止录制</label>
+          <div class="desc">按下快捷键切换录制状态</div>
+        </div>
+        <span class="shortcut-key" id="shortcutRecord">Ctrl+Shift+R</span>
+      </div>
+      <div class="setting-row">
+        <div>
+          <label>开始回放</label>
+          <div class="desc">按下快捷键回放最近的任务</div>
+        </div>
+        <span class="shortcut-key" id="shortcutPlayback">Ctrl+Shift+P</span>
+      </div>
+      <div class="setting-row">
+        <div>
+          <label>修改快捷键</label>
+          <div class="desc">在浏览器扩展快捷键设置中修改</div>
+        </div>
+        <button class="btn btn-primary" id="btnOpenShortcuts">打开快捷键设置</button>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>回放设置</h2>
+      <div class="setting-row">
+        <div>
+          <label>默认回放速度</label>
+          <div class="desc">设置默认的回放速度倍率</div>
+        </div>
+        <select id="defaultSpeed" style="padding:6px 12px;border:1px solid #d9d9d9;border-radius:6px;font-size:13px;">
+          <option value="0.5">0.5x 慢速</option>
+          <option value="1" selected>1x 正常</option>
+          <option value="2">2x 快速</option>
+          <option value="4">4x 极速</option>
+        </select>
+      </div>
+      <div class="setting-row">
+        <div>
+          <label>步骤间最大延迟</label>
+          <div class="desc">回放时两个步骤之间的最大等待时间（毫秒）</div>
+        </div>
+        <input type="number" id="maxDelay" value="3000" min="100" max="10000" step="100"
+          style="padding:6px 12px;border:1px solid #d9d9d9;border-radius:6px;font-size:13px;width:100px;">
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>数据管理</h2>
+      <div class="setting-row">
+        <div>
+          <label>导出所有任务</label>
+          <div class="desc">将所有任务导出为 JSON 文件</div>
+        </div>
+        <button class="btn btn-primary" id="btnExport">导出</button>
+      </div>
+      <div class="setting-row">
+        <div>
+          <label>导入任务</label>
+          <div class="desc">从 JSON 文件导入任务</div>
+        </div>
+        <button class="btn btn-primary" id="btnImport">导入</button>
+        <input type="file" id="importFile" accept=".json" style="display:none;">
+      </div>
+      <div class="setting-row">
+        <div>
+          <label>清除所有数据</label>
+          <div class="desc">删除所有已保存的任务和设置</div>
+        </div>
+        <button class="btn btn-danger" id="btnClearAll">清除</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="options.js"></script>
+</body>
+</html>
